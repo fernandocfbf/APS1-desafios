@@ -50,13 +50,14 @@ int verify(point p, point a, point b) {
 
     //1 - > nao é igual
 
-    //printf("verifica: %d\n", igualidade >= 0.000001);
+   // printf("verifica: %d\n", igualidade >= 0.000001);
 
     // ------------------------------------- CASOS ESPECÍFICOS ------------------------------------- 
 
-    if(igualidade < 0.000001){
+    if(igualidade < 0.000001 && p.x >= menor_ponto.x && p.x <= maior_ponto.x){
         return 2;
     }
+
 
     //se o coeficiente for o mesmo, mas os pontos não coincidirem, significa que as retas não tem intersecção (check)
     else if(paralelismo < 0.000001 && p.x > maior_ponto.x){
@@ -66,6 +67,35 @@ int verify(point p, point a, point b) {
     //se as retas são paralelas e p está na mesma direção da aresta mas não sobre ela, existe intersecção (check)
     else if(paralelismo < 0.000001 && p.x < menor_ponto.x && p.y == menor_ponto.y){
         return 1;
+    }
+
+    //casos verticais
+    else if (a.x == b.x){
+       // printf("vertical \n");
+        //reta ta na mesmo x que o ponto
+        if(b.x == p.x){
+            //p tem que estar entre o maior e o menor valor de a e b
+           if(p.y<=max(b.y,a.y) && p.y>= min(b.y,a.y)){
+               return 2;
+           }
+           else{
+               return 0; //nao ta no intervalo
+           }
+        }else{
+            //verficar se esta na direita (0) ou na esquerda-> verifica se esta no intervalo de y 
+            if(p.x > b.x){
+                return 0; //esta na direita 
+            }else{
+                //esta na esquerda 
+                if(p.y <= max(b.y,a.y) && p.y > min(b.y,a.y)){
+                    return 1;
+                }
+                else{
+                    return 0; //nao ta no intervalo
+                }
+
+            }
+        }
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -117,6 +147,13 @@ int verify(point p, point a, point b) {
         if(xa > ax_max || xa < ax_min){
             return 0;
         }
+        else if((xa==a.x && a.y>b.y)|| (xa ==b.x  && b.y>a.y)){
+            return 1;
+        }
+        else if ((xa==a.x && a.y<b.y) || (xa ==b.x  && b.y<a.y)){
+            return 0;
+        }
+
 
         else{
             return 1;
