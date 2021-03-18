@@ -66,7 +66,7 @@ int verify(point p, point a, point b) {
 
     //se as retas são paralelas e p está na mesma direção da aresta mas não sobre ela, existe intersecção (check)
     else if(paralelismo < 0.000001 && p.x < menor_ponto.x && p.y == menor_ponto.y){
-        return 1;
+        return 0;
     }
 
     //casos verticais
@@ -148,14 +148,16 @@ int verify(point p, point a, point b) {
             return 0;
         }
         else if((xa==a.x && a.y>b.y)|| (xa ==b.x  && b.y>a.y)){
+           // printf("entrou aqui \n");
             return 1;
+            
         }
         else if ((xa==a.x && a.y<b.y) || (xa ==b.x  && b.y<a.y)){
             return 0;
         }
 
 
-        else{
+        else if (xa>ax_min && xa<ax_max){
             return 1;
         }
     }
@@ -165,5 +167,19 @@ int verify(point p, point a, point b) {
 }
 
 int inside(point p, point poly[], int n) {
+    int resposta;   
+    //percorrer poly
+    for(int i =0; i<n; i++){
+        if(i==n){
+            resposta = verify(p,poly[i],poly[0]);
+        }else{
+            resposta = verify(p,poly[i],poly[i+1]);
+        }
+        if(resposta==2){
+            return 1;
+        }
+
+    }
+
     return 0;
 }
