@@ -169,13 +169,10 @@ int verify(point p, point a, point b) {
 int inside(point p, point poly[], int n) {
     int resposta;   
     int numeros_de_um = 0;
-    int numeros_de_zeros = 0;
-
-
 
     //percorre o vetor de arestas e chama a funcao verify para ver oque ela devolve e coloca no veotr respsta
     for(int i =0; i<n; i++){
-        if(i==n){
+        if(i==(n-1)){
             resposta= verify(p,poly[i],poly[0]);
         }else{
             resposta = verify(p,poly[i],poly[i+1]);
@@ -183,10 +180,6 @@ int inside(point p, point poly[], int n) {
         if(resposta==2){
             //se tiver algum 2 retorna dentro
             return 1;
-        }
-        else if(resposta==0){
-            //se tiver 0 soma um em numeros_de_zeros
-            numeros_de_zeros+=1;
         }
         else if(resposta==1){
             //se tiver 1 soma um em numeors_de_um
