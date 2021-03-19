@@ -48,10 +48,6 @@ int verify(point p, point a, point b) {
     point menor_ponto = retorna_menor_ponto(a, b);
     point maior_ponto = retorna_maior_ponto(a, b);
 
-    //1 - > nao é igual
-
-   // printf("verifica: %d\n", igualidade >= 0.000001);
-
     // ------------------------------------- CASOS ESPECÍFICOS ------------------------------------- 
 
     if(igualidade < 0.000001 && p.x >= menor_ponto.x && p.x <= maior_ponto.x){
@@ -71,7 +67,6 @@ int verify(point p, point a, point b) {
 
     //casos verticais
     else if (a.x == b.x){
-       // printf("vertical \n");
         //reta ta na mesmo x que o ponto
         if(b.x == p.x){
             //p tem que estar entre o maior e o menor valor de a e b
@@ -123,7 +118,7 @@ int verify(point p, point a, point b) {
             return 0;
         }
 
-        //y = A*x + b
+
 
         //equacao da reta robo 
         double b1 = (double) p.y;
@@ -151,7 +146,6 @@ int verify(point p, point a, point b) {
             return 0;
         }
         else if((dif_xc_xa < 0.000001 && a.y>b.y)|| (dif_xc_xb < 0.000001  && b.y>a.y)){
-           // printf("entrou aqui \n");
             return 1;
             
         }
@@ -197,7 +191,6 @@ int inside(point p, point poly[], int n) {
     else{
         return 0;
     }
-    
 
     return 0;
 }
