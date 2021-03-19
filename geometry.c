@@ -29,7 +29,7 @@ point retorna_maior_ponto(point a, point b){
 
 double eq_reta(int x1, int y1, double m, int x_para_calcular){
 
-    double y = m*(x_para_calcular-x1) + y1; //calcula o x da reta
+    double y = (double) m*(x_para_calcular-x1) + y1; //calcula o x da reta
     return y;
 }
 
@@ -40,10 +40,10 @@ int verify(point p, point a, point b) {
 
     //calcula o y para a equacação da reta do segmento passando p.x, caso
     //este seja igual o p.y e m = m_aresta, significa que a eq da reta é a mesma
-    double y_calculado_aresta = eq_reta(a.x, a.y, m_aresta, p.x);
+    double y_calculado_aresta = (double) eq_reta(a.x, a.y, m_aresta, p.x);
 
-    double paralelismo = fabs(m - m_aresta);  // se m do robô é igual ao m da aresta
-    double igualidade = fabs(y_calculado_aresta - p.y); // se ponto p está na aresta 
+    double paralelismo = (double)fabs(m - m_aresta);  // se m do robô é igual ao m da aresta
+    double igualidade =  (double)fabs(y_calculado_aresta - p.y); // se ponto p está na aresta 
 
     point menor_ponto = retorna_menor_ponto(a, b);
     point maior_ponto = retorna_maior_ponto(a, b);
@@ -118,10 +118,7 @@ int verify(point p, point a, point b) {
         //maximo valor de x para raio do robô
         int robo_x_max = 2147483647;
 
-        if(aresta_x_min > robo_x_min && robo_x_max < aresta_x_min){
-            return 0;
-        }
-
+        //robo ta a direita da aresta
         if(robo_x_min > aresta_x_min && aresta_x_max < robo_x_min){
             return 0;
         }
@@ -129,35 +126,41 @@ int verify(point p, point a, point b) {
         //y = A*x + b
 
         //equacao da reta robo 
-        double b1 = p.y;
+        double b1 = (double) p.y;
 
         //equacao da reta para a aresta 
-        double b2 = a.y - m_aresta*a.x;
+        double b2 = (double) a.y - m_aresta*a.x;
 
         //para intersectar o X deve ser igual nas duas equacoes
-        double xa = (b2-b1)/(-m_aresta);
+        double xc =  (double) ((b2-b1)/(-m_aresta));
 
         //para possuir intersecção (ponto A), precisamos que o x de A
         //esteja contido no intervalo entre do menor x e o maior x para
         //as duas retas
 
-        int ax_min = max(aresta_x_min, robo_x_min);
-        int ax_max = min(aresta_x_max, robo_x_max);
+        int cx_min = max(aresta_x_min, robo_x_min);
+        int cx_max = min(aresta_x_max, robo_x_max);
         
-        if(xa > ax_max || xa < ax_min){
+        double xa_double = (double)a.x;
+        double xb_double = (double)b.x;
+        double dif_xc_xa = (double) fabs(xa_double -xc);
+        double dif_xc_xb = (double) fabs(xb_double -xc);
+
+
+        if(xc > cx_max || xc < cx_min){
             return 0;
         }
-        else if((xa==a.x && a.y>b.y)|| (xa ==b.x  && b.y>a.y)){
+        else if((dif_xc_xa < 0.000001 && a.y>b.y)|| (dif_xc_xb < 0.000001  && b.y>a.y)){
            // printf("entrou aqui \n");
             return 1;
             
         }
-        else if ((xa==a.x && a.y<b.y) || (xa ==b.x  && b.y<a.y)){
+        else if ((dif_xc_xa < 0.000001 && a.y<b.y) || (dif_xc_xb < 0.000001  && b.y<a.y)){
             return 0;
         }
 
 
-        else if (xa>ax_min && xa<ax_max){
+        else if (xc>cx_min && xc<cx_max){
             return 1;
         }
     }
