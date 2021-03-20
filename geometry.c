@@ -67,20 +67,31 @@ int verify(point p, point a, point b) {
 
     //casos verticais
     else if (a.x == b.x){
+
         //reta ta na mesmo x que o ponto
         if(b.x == p.x){
-            //p tem que estar entre o maior e o menor valor de a e b
+
+            //se p estiver dentro do range do maior y e o menor y, ele está sob a reta
            if(p.y<=max(b.y,a.y) && p.y>= min(b.y,a.y)){
                return 2;
            }
+
+           //nao ta no intervalo
            else{
-               return 0; //nao ta no intervalo
+               return 0; 
            }
-        }else{
+        }
+        
+        //se px não for igual
+        else{
+
             //verficar se esta na direita (0) ou na esquerda-> verifica se esta no intervalo de y 
             if(p.x > b.x){
                 return 0; //esta na direita 
-            }else{
+            }
+            
+            else{
+
                 //esta na esquerda 
                 if(p.y <= max(b.y,a.y) && p.y > min(b.y,a.y)){
                     return 1;
@@ -88,18 +99,13 @@ int verify(point p, point a, point b) {
                 else{
                     return 0; //nao ta no intervalo
                 }
-
             }
         }
     }
 
-    // ---------------------------------------------------------------------------------------------
-
     // ------------------------------------- CASOS GERAIS -------------------------------------
 
     else{
-
-        //verificar se as retas se cruzam
 
         //minimo valor de x para a aresta
         int aresta_x_min = min(a.x, b.x);
@@ -117,8 +123,6 @@ int verify(point p, point a, point b) {
         if(robo_x_min > aresta_x_min && aresta_x_max < robo_x_min){
             return 0;
         }
-
-
 
         //equacao da reta robo 
         double b1 = (double) p.y;
@@ -141,25 +145,28 @@ int verify(point p, point a, point b) {
         double dif_xc_xa = (double) fabs(xa_double -xc);
         double dif_xc_xb = (double) fabs(xb_double -xc);
 
-
+        //se o intervalo de intersecção não existir, retorna 0
         if(xc > cx_max || xc < cx_min){
             return 0;
         }
+
+        //se a reta cruzar a quina superior retorna 1 (leve rotação)
         else if((dif_xc_xa < 0.000001 && a.y>b.y)|| (dif_xc_xb < 0.000001  && b.y>a.y)){
             return 1;
             
         }
+
+        //se a reta cruzar a quina inferior, retorna 0 (leve rotação)
         else if ((dif_xc_xa < 0.000001 && a.y<b.y) || (dif_xc_xb < 0.000001  && b.y<a.y)){
             return 0;
         }
 
-
+        //se cruzar no meio do intervalo, retorna 1
         else if (xc>cx_min && xc<cx_max){
             return 1;
         }
     }
 
-    // ----------------------------------------------------------------------------------------
     return 0;
 }
 
@@ -169,28 +176,33 @@ int inside(point p, point poly[], int n) {
 
     //percorre o vetor de arestas e chama a funcao verify para ver oque ela devolve e coloca no veotr respsta
     for(int i =0; i<n; i++){
+
+        //o último canto deve ser comparado com o primeiro
         if(i==(n-1)){
             resposta= verify(p,poly[i],poly[0]);
-        }else{
+        }
+        
+        //compara o canto atual com o próximo
+        else{
             resposta = verify(p,poly[i],poly[i+1]);
         }
+
+        //se tiver algum 2 retorna dentro
         if(resposta==2){
-            //se tiver algum 2 retorna dentro
             return 1;
         }
+
+        //se tiver 1 soma um em numeors_de_um
         else if(resposta==1){
-            //se tiver 1 soma um em numeors_de_um
             numeros_de_um+=1;
         }
     }
 
+    //se a quantidade de uns for ímpar devolve dentro
     if(numeros_de_um%2 != 0){
-        //se a quantidade de uns for par devolve fora
         return 1;
     }
-    else{
-        return 0;
-    }
 
+    //se for par devolve fora
     return 0;
 }
